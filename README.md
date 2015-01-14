@@ -2,7 +2,7 @@
 
 **PLEASE NOTE THAT THIS IS BETA SOFTWARE. I'M IN NO WAY RESPONSIBLE FOR ANY DATA LOSS.**
 
-<p style="text-align: center; margin: 20px 0;">
+<p align="center">
   <img src="docs/docs/img/img001.png" alt="DocsEmbedder"/>
 </p>
 
