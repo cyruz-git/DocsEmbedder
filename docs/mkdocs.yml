@@ -1,0 +1,7 @@
+site_name: DocsEmbedder
+site_author: Ciro Principe
+repo_url: https://github.com/cyruz-git/DocsEmbedder
+pages:
+- ['index.md', 'README']
+theme: united
+markdown_extensions: [attr_list]

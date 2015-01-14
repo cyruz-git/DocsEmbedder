@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        <meta name="author" content="Ciro Principe">
+        
+        <link rel="shortcut icon" href="./img/favicon.ico">
+
+        <title>DocsEmbedder</title>
+
+        <link href="./css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="./css/font-awesome-4.0.3.css" rel="stylesheet">
+        <link href="./css/prettify-1.0.css" rel="stylesheet">
+        <link href="./css/base.css" rel="stylesheet">
+
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+        <![endif]-->
+    </head>
+
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+
+        <!-- Collapsed navigation -->
+        <div class="navbar-header">
+            <!-- Expander button -->
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+
+            <!-- Main title -->
+            <a class="navbar-brand" href=".">DocsEmbedder</a>
+        </div>
+
+        <!-- Expanded navigation -->
+        <div class="navbar-collapse collapse">
+            <!-- Main navigation -->
+            <ul class="nav navbar-nav">
+            
+            
+                <li class="active">
+                    <a href=".">README</a>
+                </li>
+            
+            
+            </ul>
+
+            <!-- Search, Navigation and Repo links -->
+            <ul class="nav navbar-nav navbar-right">
+                
+                <li class="disabled">
+                    <a rel="next" >
+                        <i class="fa fa-arrow-left"></i> Previous
+                    </a>
+                </li>
+                <li class="disabled">
+                    <a rel="prev" >
+                        Next <i class="fa fa-arrow-right"></i>
+                    </a>
+                </li>
+                
+                <li>
+                    <a href="https://github.com/cyruz-git/DocsEmbedder">
+                        
+                            <i class="fa fa-github"></i>
+                        
+                        GitHub
+                    </a>
+                </li>
+                
+            </ul>
+        </div>
+    </div>
+</div>
+
+        <div class="container">
+            <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+    
+        <li class="main active"><a href="#docsembedder">DocsEmbedder</a></li>
+        
+            <li><a href="#how-it-works">How it works</a></li>
+        
+            <li><a href="#remarks">Remarks</a></li>
+        
+            <li><a href="#setup-and-usage">Setup and usage</a></li>
+        
+            <li><a href="#license">License</a></li>
+        
+            <li><a href="#contact">Contact</a></li>
+        
+    
+    </ul>
+</div></div>
+            <div class="col-md-9" role="main">
+
+<h1 id="docsembedder">DocsEmbedder</h1>
+<p><strong>PLEASE NOTE THAT THIS IS BETA SOFTWARE. I'M IN NO WAY RESPONSIBLE FOR ANY DATA LOSS.</strong></p>
+<p class="imgcenter"><img alt="Screenshot" src="./img/img001.png" /></p>
+<p><em>DocsEmbedder</em> is a tool that allows to embed a set of documentation files, html related, inside a <strong>PE</strong> (portable executable) file. The documentation can then be referenced and visualized using the <strong>res://</strong> protocol with a compatible browser or ActiveX control.</p>
+<p>One of the way to embed a documentation is to write the desired markdown files, build a site with <a href="http://www.mkdocs.org/">MkDocs</a> and then embed the resulting files with <em>DocsEmbedder</em>, flattening them first. This document is actually embedded in the binary release of <em>DocsEmbedder</em> and can be visualized clicking on its <strong>Help</strong> menu item.</p>
+<h3 id="how-it-works">How it works</h3>
+<p><em>DocsEmbedder</em> loops over a desired directory, loading all files and embedding them inside the desired PE file, through the Win32 <a href="http://msdn.microsoft.com/en-us/library/windows/desktop/ms648049%28v=vs.85%29.aspx">UpdateResource</a> function. Because of a documentation site being often structured in multiple subfolders, <em>DocsEmbedder</em> can <strong>flatten</strong> the desired directory, moving all subfolders files to the root directory and changing all the <strong>href</strong> and <strong>src</strong> attributes in the html files according to the new structure. A <strong>temporary folder</strong> can be used to avoid any change to the actual files.</p>
+<p><em>DocsEmbedder</em> can embed the files in a pre-existing PE file or generate a new one with the desired name and extension. The generated file is a hardcoded executable, compiled with Visual C++ 2010 Express, optimized to keep the size less than 1 KB. If run, the generated executable shows a message box and returns.</p>
+<h3 id="remarks">Remarks</h3>
+<ul>
+<li>
+<p>There could be issues if the documentation is embedded on a <strong>compressed</strong> executable that already contains resources. The correct behaviour would be to embed the documentation first and then compress the executable, or use a standalone file.</p>
+</li>
+<li>
+<p>The site must be <strong>flat</strong> (all the resources must reside in the root folder) because of the limitations of the PE format. The flattening feature of the program must be used if the documentation site cannot be organized in a single flat folder.</p>
+</li>
+<li>
+<p>All the resources will be stored inside the PE file using their <strong>filename</strong> (with extension) as resource name, <strong>RT_HTML</strong> as resource type and a <strong>neutral</strong> language identifier. </p>
+</li>
+<li>
+<p>Because of some limitations of the <strong>res://</strong> protocol, filenames cannot contain exclusively digits (or/and spaces), so they must be named carefully. E.g. "001.png" doesn't work, "img001.png" works.</p>
+</li>
+<li>
+<p>The embedded files can be referenced only by a compatible viewer (like <strong>Internet Explorer</strong>).</p>
+</li>
+</ul>
+<h3 id="setup-and-usage">Setup and usage</h3>
+<p>There is nothing to setup in <em>DocsEmbedder</em>. It is ready to use:</p>
+<p class="imgcenter"><img alt="Screenshot" src="./img/img002.png" /></p>
+<ol>
+<li>
+<p>Select the desired PE file, clicking on the first <strong>Browse</strong> button. If you want to use a standalone file, just use a free filename in the current directory, no matter the extension.</p>
+</li>
+<li>
+<p>Select the desired folder containing the html related files, clicking on the second <strong>Browse</strong> button. </p>
+</li>
+<li>
+<p>Flag the <strong>"Flatten the html folder"</strong> checkbox if you need to flatten the selected folder. If you don't want to modify the source files, flag the <strong>"Flatten to a temporary folder"</strong> checkbox.</p>
+</li>
+<li>
+<p>Click on the <strong>Embed</strong> button and wait for the popup confirmation.</p>
+</li>
+</ol>
+<p>The documentation can now be accessed on any client compatible with the <strong>res://</strong> protocol, using the following address:</p>
+<pre><code>res://C:\path\to\pefile/resourcename
+</code></pre>
+<p>E.g. If the choosen PE file is <strong>test.exe</strong> and the embedded resource is <strong>index.html</strong>, the address is the following:</p>
+<pre><code>res://C:\path\to\test.exe/index.html
+</code></pre>
+<h3 id="license">License</h3>
+<p><em>DocsEmbedder</em> is released under the terms of the <a href="http://www.gnu.org/licenses/">GNU General Public License</a>. The program logo contains an icon from the <a href="http://www.customicondesign.com/free-icons/pretty-office-icon-set/pretty-office-icon-set-part-7/">Pretty Office Icon Set Part 7</a>, released under the term of <a href="http://www.customicondesign.com/license-agreement/">CustomIconDesign License Agreement</a>.</p>
+<h3 id="contact">Contact</h3>
+<p>For hints, bug reports or anything else, you can contact me at <a href="mailto:focabresm@gmail.com">focabresm@gmail.com</a>, open a issue on the dedicated <a href="https://github.com/cyruz-git/DocsEmbedder">GitHub repo</a> or use the <a href="http://ahkscript.org/boards/viewtopic.php?f=6&amp;t=5918">AHKscript development thread</a>.</p>
+</div>
+        </div>
+
+        
+
+        <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+        <script src="./js/bootstrap-3.0.3.min.js"></script>
+        <script src="./js/prettify-1.0.min.js"></script>
+        <script src="./js/base.js"></script>
+    </body>
+</html>
