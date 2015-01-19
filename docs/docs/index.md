@@ -52,7 +52,7 @@ E.g. If the choosen PE file is **test.exe** and the embedded resource is **index
 
 ### License
 
-*DocsEmbedder* is released under the terms of the [GNU General Public License](http://www.gnu.org/licenses/). The program logo contains an icon from the [Pretty Office Icon Set Part 7](http://www.customicondesign.com/free-icons/pretty-office-icon-set/pretty-office-icon-set-part-7/), released under the term of [CustomIconDesign License Agreement](http://www.customicondesign.com/license-agreement/).
+*DocsEmbedder* is released under the terms of the [GNU Lesser General Public License](http://www.gnu.org/licenses/). The program logo contains an icon from the [Pretty Office Icon Set Part 7](http://www.customicondesign.com/free-icons/pretty-office-icon-set/pretty-office-icon-set-part-7/), released under the term of [CustomIconDesign License Agreement](http://www.customicondesign.com/license-agreement/).
 
 ### Contact
 

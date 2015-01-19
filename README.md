@@ -40,6 +40,7 @@ Name | Description
 docs\ | Folder containing the documentation, built with MkDocs.
 lib\ | Folder containing the required libraries.
 COPYING | GNU General Public License.
+COPYING.LESSER | GNU Lesser General Public License.
 DocsEmbedder.ahk | Main source file.
 Icon.ico | Program's icon file.
 Logo.png | Program's logo file.
@@ -63,7 +64,7 @@ The documentation site is built with [MkDocs](http://www.mkdocs.org/).
 
 ### License
 
-*DocsEmbedder* is released under the terms of the [GNU General Public License](http://www.gnu.org/licenses/). The program logo contains an icon from the [Pretty Office Icon Set Part 7](http://www.customicondesign.com/free-icons/pretty-office-icon-set/pretty-office-icon-set-part-7/), released under the term of [CustomIconDesign License Agreement](http://www.customicondesign.com/license-agreement/).
+*DocsEmbedder* is released under the terms of the [GNU Lesser General Public License](http://www.gnu.org/licenses/). The program logo contains an icon from the [Pretty Office Icon Set Part 7](http://www.customicondesign.com/free-icons/pretty-office-icon-set/pretty-office-icon-set-part-7/), released under the term of [CustomIconDesign License Agreement](http://www.customicondesign.com/license-agreement/).
 
 ### Contact
 
