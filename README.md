@@ -43,12 +43,15 @@ COPYING | GNU General Public License.
 COPYING.LESSER | GNU Lesser General Public License.
 DocsEmbedder.ahk | Main source file.
 Icon.ico | Program's icon file.
+LibSetup.ahk | Libraries setup script.
 Logo.png | Program's logo file.
 README.md | This document.
 
 ### How to compile
 
 *DocsEmbedder* should be compiled with the **Ahk2Exe** compiler, that can be downloaded from the [AHKscript download page](http://ahkscript.org/download/).
+
+Run the `LibSetup.ahk` script in advance to retrieve the required libraries from GitHub.
 
 Browse to the files so that the fields are filled as follows:
 
