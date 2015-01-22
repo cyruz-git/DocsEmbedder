@@ -3,7 +3,8 @@
 ; Description ..: Tool that allows to embed a set of html related files inside a PE file.
 ; AHK Version ..: AHK_L 1.1.13.01 x32/64 Unicode
 ; Author .......: Cyruz - http://ciroprincipe.info
-; Changelog ....: Jan. 13, 2015 - v0.1 - First version.
+; Changelog ....: Jan. 13, 2015 - v0.1   - First version.
+; ..............: Jan. 22, 2015 - v0.1.1 - Now using the Bin library to load the logo.
 ; License ......: GNU Lesser General Public License
 ; ..............: This program is free software: you can redistribute it and/or modify it under the terms of the GNU
 ; ..............: Lesser General Public License as published by the Free Software Foundation, either version 3 of the
@@ -18,6 +19,7 @@
 #SingleInstance force
 #NoTrayIcon
 #NoEnv
+#Include <Bin>
 #Include <PECreateEmpty>
 #Include <UpdRes>
 
@@ -70,41 +72,22 @@ Return
 ; ===[ LABELS ]=========================================================================================================
 ; ======================================================================================================================
 
- 1ADDPICTURE:
+1ADDPICTURE:
     ; Code based on http://www.autohotkey.com/forum/viewtopic.php?p=147052
     Gui, 1:Add, Text, w376 h110 x67 +0xE hwnd1TEXT_A_HWND
-
-    hRsrc := DllCall( "FindResource",   Ptr,0, Str,"LOGO.PNG", Ptr,10, Ptr )
-    sData := DllCall( "SizeofResource", Ptr,0, Ptr,hRsrc, UInt )
-    hRes  := DllCall( "LoadResource",   Ptr,0, Ptr,hRsrc, Ptr )
-    pData := DllCall( "LockResource",   Ptr,hRes, Ptr )
-    hGlob := DllCall( "GlobalAlloc",    UInt,2, UInt,sData, Ptr ) ; 2 = GMEM_MOVEABLE
-    pGlob := DllCall( "GlobalLock",     Ptr,hGlob, Ptr )
-    DllCall( "msvcrt.dll\memcpy",               Ptr,pGlob, Ptr,pData, UInt,sData, "CDecl" )
-    DllCall( "GlobalUnlock",                    Ptr,hGlob )
-    DllCall( "ole32.dll\CreateStreamOnHGlobal", Ptr,hGlob, Int,1, PtrP,pStream )
-
-    hGdip := DllCall( "LoadLibrary", Str,"Gdiplus.dll" )
-    VarSetCapacity(si, 16, 0), NumPut(1, si, "UChar")
-    DllCall( "Gdiplus.dll\GdiplusStartup",              PtrP,gdipToken, Ptr,&si, Ptr,0 )
-    DllCall( "Gdiplus.dll\GdipCreateBitmapFromStream",  Ptr,pStream, PtrP,pBitmap )
-    DllCall( "Gdiplus.dll\GdipCreateHBITMAPFromBitmap", Ptr,pBitmap, PtrP,hBitmap, UInt,0 )
+    szData  := 0, pData := UpdRes_LockResource("LOGO.PNG", 10, szData)
+    hBitmap := Bin_GetBitmap(pData, szData)
     SendMessage, 0x172, 0, hBitmap,, ahk_id %1TEXT_A_HWND% ; 0x172 = STM_SETIMAGE, 0 = IMAGE_BITMAP
     GuiControl, 1:Move, %1TEXT_A_HWND%, w376 h110
-
-    DllCall( "Gdiplus.dll\GdipDisposeImage", Ptr,pBitmap )
-    DllCall( "Gdiplus.dll\GdiplusShutdown",  Ptr,gdipToken )
-    DllCall( "FreeLibrary",                  Ptr,hGdip )
-    ObjRelease(pStream)
     Return
 ;1ADDPICTURE
 
- 1DUMMY:
+1DUMMY:
     FileInstall, Logo.png, DUMMY
     Return
 ;1DUMMY
 
- 1BTN_A_BROWSE:
+1BTN_A_BROWSE:
     Gui, 1:+OwnDialogs
     FileSelectFile, sFile, S2,, Select the PE file in which the resources will be embedded:
     If ( ErrorLevel )
@@ -113,7 +96,7 @@ Return
     Return
 ;1BTN_A_BROWSE
 
- 1BTN_B_BROWSE:
+1BTN_B_BROWSE:
     Gui, 1:+OwnDialogs
     FileSelectFolder, sDir,, 0, Select the folder containing the html resources to embed:
     If ( ErrorLevel )
@@ -122,7 +105,7 @@ Return
     Return
 ;1BTN_B_BROWSE
 
- 1BTN_C_EMBED:
+1BTN_C_EMBED:
     Gui, 1:+OwnDialogs
     Gui, 1:Submit, NoHide
     GuiControl, 1:Disable, 1BTN_C
@@ -164,18 +147,18 @@ Return
     Return
 ;1BTN_C_EMBED
 
- 1CBOX_A_FLATTEN:
+1CBOX_A_FLATTEN:
     GuiControlGet, bVal, 1:, 1CBOX_A
     GuiControl, 1:Enable%bVal%, 1CBOX_B
     Return
 ;1CBOX_A_FLATTEN
 
- 1MENU_HELP:
+1MENU_HELP:
     ShowBrowser(HELPWIDTH, HELPHEIGHT, SCRIPTNAME " - Help", DOCPATH)
     Return
 ;HELP
 
- 1MENU_ABOUT:
+1MENU_ABOUT:
     Gui, 1:+OwnDialogs
     MsgBox, 0x40, %SCRIPTNAME%,
     ( LTrim
@@ -190,7 +173,7 @@ Return
     Return
 ;ABOUT
 
- GUICLOSE:
+GUICLOSE:
     ExitApp
 ;GUICLOSE
 

@@ -6,11 +6,14 @@
 ; ----------------------------------------------------------------------------------------------------------------------
 
 ; ===[ LIB VARIABLES ]==================================================================================================
-  LIB_URL_1 = https://raw.githubusercontent.com/cyruz-git/ahk-libs/master/PECreateEmpty.ahk
-  LIB_FNM_1 = PECreateEmpty.ahk
+  LIB_URL_1 = https://raw.githubusercontent.com/cyruz-git/ahk-libs/master/Bin.ahk
+  LIB_FNM_1 = Bin.ahk
 
-  LIB_URL_2 = https://raw.githubusercontent.com/cyruz-git/ahk-libs/master/UpdRes.ahk
-  LIB_FNM_2 = UpdRes.ahk
+  LIB_URL_2 = https://raw.githubusercontent.com/cyruz-git/ahk-libs/master/PECreateEmpty.ahk
+  LIB_FNM_2 = PECreateEmpty.ahk
+
+  LIB_URL_3 = https://raw.githubusercontent.com/cyruz-git/ahk-libs/master/UpdRes.ahk
+  LIB_FNM_3 = UpdRes.ahk
 ; ======================================================================================================================
 
 If ( !InStr(FileExist(A_ScriptDir "\lib"), "D") )
