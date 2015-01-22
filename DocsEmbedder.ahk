@@ -4,7 +4,7 @@
 ; AHK Version ..: AHK_L 1.1.13.01 x32/64 Unicode
 ; Author .......: Cyruz - http://ciroprincipe.info
 ; Changelog ....: Jan. 13, 2015 - v0.1   - First version.
-; ..............: Jan. 22, 2015 - v0.1.1 - Now using the Bin library to load the logo.
+; ..............: Jan. 22, 2015 - v0.1.1 - Now using the BinGet library to load the logo.
 ; License ......: GNU Lesser General Public License
 ; ..............: This program is free software: you can redistribute it and/or modify it under the terms of the GNU
 ; ..............: Lesser General Public License as published by the Free Software Foundation, either version 3 of the
@@ -19,7 +19,7 @@
 #SingleInstance force
 #NoTrayIcon
 #NoEnv
-#Include <Bin>
+#Include <BinGet>
 #Include <PECreateEmpty>
 #Include <UpdRes>
 
@@ -76,7 +76,7 @@ Return
     ; Code based on http://www.autohotkey.com/forum/viewtopic.php?p=147052
     Gui, 1:Add, Text, w376 h110 x67 +0xE hwnd1TEXT_A_HWND
     szData  := 0, pData := UpdRes_LockResource("LOGO.PNG", 10, szData)
-    hBitmap := Bin_GetBitmap(pData, szData)
+    hBitmap := BinGet_Bitmap(pData, szData)
     SendMessage, 0x172, 0, hBitmap,, ahk_id %1TEXT_A_HWND% ; 0x172 = STM_SETIMAGE, 0 = IMAGE_BITMAP
     GuiControl, 1:Move, %1TEXT_A_HWND%, w376 h110
     Return
