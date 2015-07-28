@@ -25,7 +25,7 @@
 
 ; ===[ CONSTANTS ]======================================================================================================
   SCRIPTNAME    := "DocsEmbedder"
-  SCRIPTVERSION := "0.1"
+  SCRIPTVERSION := "0.1.1"
   HELPWIDTH     := 1024
   HELPHEIGHT    := 500
   DOCPATH       := ( A_IsCompiled ) ? "res://" A_ScriptFullPath "/index.html" : A_ScriptDir "\docs\site\index.html"
@@ -51,7 +51,7 @@ If ( A_IsCompiled )
     GoSub, 1ADDPICTURE
 Else
     ; Gui width: 500. Logo width: 376. To center it (500-376)/2 = 67.
-    Gui, 1:Add, Picture, x67, %A_ScriptDir%\Logo.png
+    Gui, 1:Add, Picture, x67, %A_ScriptDir%\res\logo.png
 
 Gui, 1:Add, GroupBox,   w480 h120 x10 y+15, Required Parameters:
 Gui, 1:Add, Text,       w60 x20 yp+30, PE File:
@@ -75,7 +75,7 @@ Return
 1ADDPICTURE:
     ; Code based on http://www.autohotkey.com/forum/viewtopic.php?p=147052
     Gui, 1:Add, Text, w376 h110 x67 +0xE hwnd1TEXT_A_HWND
-    szData  := 0, pData := UpdRes_LockResource("LOGO.PNG", 10, szData)
+    szData  := 0, pData := UpdRes_LockResource(0, "RES\LOGO.PNG", 10, szData)
     hBitmap := BinGet_Bitmap(pData, szData)
     SendMessage, 0x172, 0, hBitmap,, ahk_id %1TEXT_A_HWND% ; 0x172 = STM_SETIMAGE, 0 = IMAGE_BITMAP
     GuiControl, 1:Move, %1TEXT_A_HWND%, w376 h110
@@ -83,7 +83,7 @@ Return
 ;1ADDPICTURE
 
 1DUMMY:
-    FileInstall, Logo.png, DUMMY
+    FileInstall, res\logo.png, DUMMY
     Return
 ;1DUMMY
 
@@ -111,13 +111,15 @@ Return
     GuiControl, 1:Disable, 1BTN_C
     sFinalFile := 1EDIT_A, sFinalDir := 1EDIT_B
     
-    If ( sFinalFile == "" || sFinalDir == "" ) {
+    If ( sFinalFile == "" || sFinalDir == "" )
+    {
         MsgBox, 0x10, %SCRIPTNAME%, PE File or/and Html Folder missing.
         GuiControl, 1:Enable, 1BTN_C
         Return
     }
     
-    If ( (sErrMsg := CheckDirAndFilenames(sFinalDir, 1CBOX_A)) != "" ) {
+    If ( (sErrMsg := CheckDirAndFilenames(sFinalDir, 1CBOX_A)) != "" )
+    {
         MsgBox, 0x10, %SCRIPTNAME%, %sErrMsg%
         GuiControl, 1:Enable, 1BTN_C
         Return
@@ -134,7 +136,7 @@ Return
       , PECreateEmpty(sFinalFile)
     
     SB_SetText("Embedding resources...")
-    ; 0 = DELETE OLD, 23 = RT_HTML, 0 = NEUTRAL LANG ID
+    ; DELETE OLD = 0, RT_HTML = 23, NEUTRAL LANG ID = 0
     UpdRes_UpdateDirOfResources(sFinalDir, sFinalFile, 0, 23, 0)
     
     ; Remove the temporary folder if the checkboxes are both selected.
@@ -182,14 +184,16 @@ GUICLOSE:
 ; ======================================================================================================================
 
 ; Check if a directory contains any file.
-IsDirEmpty(sDir, nRecur:=0) {
+IsDirEmpty(sDir, nRecur:=0)
+{
     Loop, %sDir%\*, 0, %nRecur%
         Return 0
     Return 1
 }
 
 ; Check directory for emptyness and files for malformed file names (e.g. only numbers).
-CheckDirAndFilenames(sDir, bFlatten) {
+CheckDirAndFilenames(sDir, bFlatten)
+{
     sRegex = iS)^[\d\W]+(?!\w)
     
     bFlagFlatt := IsDirEmpty(sDir)
@@ -209,10 +213,12 @@ CheckDirAndFilenames(sDir, bFlatten) {
 }
 
 ; Move all the files to the root directory, flattening it.
-FlattenFiles(sDir, sTempDir:="") {
+FlattenFiles(sDir, sTempDir:="")
+{
     If ( isDirEmpty(sDir, 1) )
         Return 0
-    If ( sTempDir != "" ) {
+    If ( sTempDir != "" )
+    {
         If ( InStr(FileExist(sTempDir), "D") )
             FileRemoveDir, %sTempDir%, 1
         FileCopyDir, %sDir%, %sTempDir%, 1
@@ -232,7 +238,8 @@ FlattenFiles(sDir, sTempDir:="") {
 
 ; Replace the href/src/url attributes inside html and css files.
 ; The directory must be flattened.
-ReplaceHrefs(sDir) {
+ReplaceHrefs(sDir)
+{
     sRegex_htm = iS)(?:(href|src)\s*=\s*("|')\s*[^:"']*(?:\/|\\))(?=[^\/\\:"']+\s*["'])
     sSubst_htm = $1=$2
     sRegex_css = iS)(?:url\s*\(("|')\s*[^:"']*(?:\/|\\))(?=[^\/\\:"']+\s*["'])
@@ -240,7 +247,8 @@ ReplaceHrefs(sDir) {
     
     Loop, %sDir%\*.*    ; No recursion.
     {
-        If ( InStr(A_LoopFileExt, "htm") || InStr(A_LoopFileExt, "css") ) {
+        If ( InStr(A_LoopFileExt, "htm") || InStr(A_LoopFileExt, "css") )
+        {
             FileRead, sContent, %A_LoopFileLongPath%
             sRegex := ( InStr(A_LoopFileExt, "htm") ) ? sRegex_htm : sRegex_css
             sSubst := ( InStr(A_LoopFileExt, "htm") ) ? sSubst_htm : sSubst_css
@@ -252,7 +260,8 @@ ReplaceHrefs(sDir) {
 }
 
 ; Show a res:// url in an embedded WebBrowser ActiveX object.
-ShowBrowser(nW, nH, sGuiName, sResUrl) {
+ShowBrowser(nW, nH, sGuiName, sResUrl)
+{
     Static 2AX_A, 2AX_A_HWND
     
     Gui, 2:Destroy

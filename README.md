@@ -20,12 +20,11 @@ The build archive is [here on GitHub](https://github.com/cyruz-git/DocsEmbedder/
 Name | Description
 -----|------------
 docs\ | Folder containing the documentation, built with MkDocs.
+res\ | Folder containing icon resources and program logo.
 COPYING | GNU General Public License.
 COPYING.LESSER | GNU Lesser General Public License.
 DocsEmbedder.ahk | Main source file.
-Icon.ico | Program's icon file.
 LibSetup.ahk | Libraries setup script.
-Logo.png | Program's logo file.
 README.md | This document.
 
 ### How to compile
